@@ -33,12 +33,12 @@ class Command(RunServerCommand):
 
         asyncio.run(self.setup_ngrok())
         self.stdout.write(
-            f"ngrok forwarding to {self.addr} from ingress url: {self.ingress_url}"
+            f"ngrok forwarding to {self.addr} from ingress url: {self.listener.url()}"
         )
 
     async def setup_ngrok(self):
         try:
-            listener = await ngrok.forward(
+            self.listener = await ngrok.forward(
                 addr=self.addr,
                 authtoken_from_env=True,
                 domain=self.domain,
@@ -46,5 +46,3 @@ class Command(RunServerCommand):
         except ValueError as e:
             self.stderr.write(f"Error setting up ngrok: {e}")
             os._exit(1)
-
-        self.ingress_url = listener.url()
