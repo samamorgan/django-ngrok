@@ -1,0 +1,10 @@
+[project]
+name = "django-ngrok"
+version = "0.1.0"
+description = "Expose your local Django app to the internet with ngrok"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = ["django>=4.2.17", "ngrok>=1.4.0"]
+
+[dependency-groups]
+dev = ["pytest>=8.3.4", "ruff>=0.8.2"]
