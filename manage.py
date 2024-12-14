@@ -1,34 +1,23 @@
-import html
+#!/usr/bin/env python
+"""Django's command-line utility for administrative tasks."""
+
 import os
 import sys
 
-from django.conf import settings
-from django.core.wsgi import get_wsgi_application
-from django.http import HttpResponse
-from django.urls import path
-from django.utils.crypto import get_random_string
 
-settings.configure(
-    DEBUG=(os.environ.get("DEBUG", "") == "1"),
-    ALLOWED_HOSTS=["*"],
-    INSTALLED_APPS=["django_ngrok"],
-    ROOT_URLCONF=__name__,
-    SECRET_KEY=get_random_string(50),
-)
+def main():
+    """Run administrative tasks."""
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tests.settings")
+    try:
+        from django.core.management import execute_from_command_line
+    except ImportError as exc:
+        raise ImportError(
+            "Couldn't import Django. Are you sure it's installed and "
+            "available on your PYTHONPATH environment variable? Did you "
+            "forget to activate a virtual environment?"
+        ) from exc
+    execute_from_command_line(sys.argv)
 
-
-def index(request):
-    name = request.GET.get("name", "World")
-    return HttpResponse(f"Hello, {html.escape(name)}!")
-
-
-urlpatterns = [
-    path("", index),
-]
-
-app = get_wsgi_application()
 
 if __name__ == "__main__":
-    from django.core.management import execute_from_command_line
-
-    execute_from_command_line(sys.argv)
+    main()

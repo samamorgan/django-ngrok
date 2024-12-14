@@ -2,46 +2,39 @@ from __future__ import annotations
 
 import asyncio
 import os
-from typing import TYPE_CHECKING
+from urllib.parse import ParseResult, urlunparse
 
 import ngrok
+from django.conf import settings
 from django.core.management.commands.runserver import Command as RunServerCommand
-
-if TYPE_CHECKING:
-    from django.core.management.base import CommandParser
 
 
 class Command(RunServerCommand):
-    help = f"{RunServerCommand.help[:-1]} with ngrok."
-
-    def add_arguments(self, parser: CommandParser) -> None:
-        super().add_arguments(parser)
-
-        parser.add_argument(
-            "--domain",
-            help="host tunnel on a custom subdomain or hostname.",
-        )
-
-    def handle(self, *args, **options) -> None:
-        self.domain = options.get("domain")
-        print(self.domain)
-
-        super().handle(*args, **options)
+    help = f'{RunServerCommand.help.rstrip(".")} with ngrok.'
 
     def on_bind(self, server_port: int) -> None:
         super().on_bind(server_port)
 
-        asyncio.run(self.setup_ngrok())
+        asyncio.run(self.setup_ngrok(server_port))
         self.stdout.write(
-            f"ngrok forwarding to {self.addr} from ingress url: {self.listener.url()}"
+            f"ngrok forwarding to {self.listener_addr} from ingress url: {self.listener.url()}"
         )
 
-    async def setup_ngrok(self):
+    async def setup_ngrok(self, server_port: int) -> None:
+        parts = ParseResult(
+            scheme=self.protocol,
+            netloc=f"{self.addr}:{server_port}",
+            path="",
+            params="",
+            query="",
+            fragment="",
+        )
+        self.listener_addr = urlunparse(parts)
+
         try:
             self.listener = await ngrok.forward(
-                addr=self.addr,
-                authtoken_from_env=True,
-                domain=self.domain,
+                addr=self.listener_addr,
+                **settings.NGROK_CONFIG,
             )
         except ValueError as e:
             self.stderr.write(f"Error setting up ngrok: {e}")
