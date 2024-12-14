@@ -1,20 +1,33 @@
 [project]
 name = "django-ngrok"
 version = "0.1.0"
+authors = [{ name = "Sam Morgan", email = "sama4mail@gmail.com" }]
 description = "Expose your local Django app to the internet with ngrok"
+license = { file = "LICENSE.md" }
 readme = "README.md"
 requires-python = ">=3.9"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Framework :: Django",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9 ",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
 dependencies = ["django>=4.2.17", "ngrok>=1.4.0"]
 
+[project.urls]
+Repository = "https://github.com/samamorgan/django-ngrok"
+Issues = "https://github.com/samamorgan/django-ngrok/issues"
+
 [dependency-groups]
-dev = [
- "ruff>=0.8.2",
-]
-test = [
-    "pytest>=8.3.4",
-    "pytest-django>=4.9.0",
-    "requests>=2.32.3",
-]
+dev = ["ruff>=0.8.2"]
+test = ["pytest>=8.3.4", "pytest-django>=4.9.0", "requests>=2.32.3"]
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "tests.settings"
