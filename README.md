@@ -18,11 +18,30 @@ INSTALLED_APPS = [
 ]
 ```
 
-3. Run `python manage.py runserver_ngrok` to start a django development server and an ngrok tunnel pointing to the server address.
+3. Set the `NGROK_AUTHTOKEN` environment variable to [your ngrok authtoken](https://dashboard.ngrok.com/get-started/your-authtoken):
+
+```bash
+export NGROK_AUTHTOKEN="your-ngrok-authtoken"
+```
+
+4. Run `python manage.py runserver_ngrok` to start a django development server and an ngrok tunnel pointing to the server address. You should expect to see the following output:
+
+```
+Watching for file changes with StatReloader
+Performing system checks...
+
+System check identified no issues (0 silenced).
+December 13, 2024 - 19:58:42
+Django version X.Y.ZZ, using settings 'your.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+
+ngrok forwarding to http://127.0.0.1:8000 from ingress url: https://your-ngrok-domain.ngrok-free.app
+```
 
 ## Configuration
 
-django-ngrok uses the `forward` method from [`ngrok-python`](https://github.com/ngrok/ngrok-python) to create a tunnel to the Django development server. If you are using a simple setup, no configuration is necessary, and you can get up-and-running by setting the `NGROK_AUTHTOKEN` environment variable.
+django-ngrok uses the `forward` method from [`ngrok-python`](https://github.com/ngrok/ngrok-python) to create a tunnel to the Django development server. If you are using a simple setup, no configuration is necessary, and you can get up-and-running by following the [quick start](#quick-start).
 
 For a more explicit setup, you can add the `NGROK_CONFIG` setting to your Django settings file. All options below are documented [here](https://github.com/ngrok/ngrok-python#full-configuration). If you have any questions about how to use these options, please direct them to the `ngrok-python` maintainers.
 
