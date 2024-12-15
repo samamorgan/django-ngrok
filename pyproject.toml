@@ -31,3 +31,7 @@ test = ["pytest>=8.3.4", "pytest-django>=4.9.0", "requests>=2.32.3"]
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "tests.settings"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
