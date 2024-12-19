@@ -1,0 +1,54 @@
+name: CI
+
+on: [pull_request, workflow_dispatch, workflow_call]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: CI
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+
+    steps:
+      - name: Checkout ${{ github.repository }}
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+          python-version: ${{ matrix.python-version }}
+
+      - name: Set up Python ${{ matrix.python-version }}
+        run: uv python install
+
+      - name: Install the project
+        run: uv sync --dev
+
+      - name: Run tests
+        env:
+          NGROK_AUTHTOKEN: ${{ secrets.NGROK_AUTHTOKEN }}
+          NGROK_DOMAIN: ${{ secrets.NGROK_DOMAIN }}
+        run: |
+          uv run pytest \
+          --junitxml=pytest.xml \
+          --cov-report=term-missing:skip-covered \
+          --cov=django_ngrok | tee pytest-coverage.txt
+
+      - name: Add coverage comment
+        uses: MishaKav/pytest-coverage-comment@main
+        continue-on-error: true
+        with:
+          pytest-coverage-path: ./pytest-coverage.txt
+          junitxml-path: ./pytest.xml
+          report-only-changed-files: true
+          title: Coverage Report (Python ${{ matrix.python-version }})
+          unique-id-for-comment: ${{ matrix.python-version }}
+          remove-link-from-badge: true
