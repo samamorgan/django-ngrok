@@ -57,7 +57,7 @@ class TestCommand:
             f"{command.listener.url()}"
         ) in out
 
-    # @pytest.mark.usefixtures("_monkeypatch__exit")
+    @pytest.mark.usefixtures("_monkeypatch__exit")
     def test_setup_ngrok(
         self, command: Command, settings: SettingsWrapper, capfd: pytest.CaptureFixture
     ) -> None:
