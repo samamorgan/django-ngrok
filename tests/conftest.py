@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from typing import Generator
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture
 def runserver_ngrok() -> Generator[None, None, None]:
     process = subprocess.Popen(
         ["python", "manage.py", "runserver_ngrok"],
