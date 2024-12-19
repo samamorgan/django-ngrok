@@ -22,7 +22,7 @@ jobs:
           - "3.13"
 
     steps:
-      - name: Checkout ${{ github.repository }}/${{ github.ref }}
+      - name: Checkout ${{ github.repository }}/${{ github.ref_name }}
         uses: actions/checkout@v4
 
       - name: Install uv
