@@ -39,6 +39,13 @@ Quit the server with CONTROL-C.
 ngrok forwarding to http://127.0.0.1:8000 from ingress url: https://your-ngrok-domain.ngrok-free.app
 ```
 
+## Invocation
+The `runserver_ngrok` command is a drop-in replacement for Django's [`runserver`](https://docs.djangoproject.com/en/dev/ref/django-admin/#runserver) command. It accepts the same arguments and options as `runserver`, and it will pass them through to the Django development server. For example, to run the development server on a different port, you can run:
+
+```bash
+python manage.py runserver_ngrok 8080
+```
+
 ## Configuration
 
 django-ngrok uses the `forward` method from [`ngrok-python`](https://github.com/ngrok/ngrok-python) to create a tunnel to the Django development server. If you are using a simple setup, no configuration is necessary, and you can get up-and-running by following the [quick start](#quick-start).
