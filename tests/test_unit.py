@@ -21,11 +21,13 @@ class TestCommand:
         command.addr = command.default_addr
         command._raw_ipv6 = False
 
-        return command
+        yield command
 
     @pytest.fixture
     def listener_url(self, faker: Faker) -> str:
-        return f'https://{"-".join(faker.words(nb=3, unique=True))}.ngrok-free.app'
+        sumdomain = "".join(faker.words(nb=3, unique=True))
+
+        return f"https://{sumdomain}.ngrok-free.app"
 
     @pytest.fixture
     def _monkeypatch_setup_ngrok(
