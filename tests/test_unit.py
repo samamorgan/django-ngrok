@@ -25,7 +25,7 @@ class TestCommand:
 
     @pytest.fixture
     def listener_url(self, faker: Faker) -> str:
-        sumdomain = "".join(faker.words(nb=3, unique=True))
+        sumdomain = "-".join(faker.words(nb=3, unique=True))
 
         return f"https://{sumdomain}.ngrok-free.app"
 
